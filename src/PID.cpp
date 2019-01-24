@@ -57,6 +57,9 @@ void PID::UpdateError(double cte) {
    * TODO: Update PID errors based on cte.
    */
 	
+	// define variables
+	current_change = 0;
+	
 	// calculate error terms
 	d_error = cte - p_error;
 	p_error = cte;
@@ -89,6 +92,9 @@ void PID::UpdateError(double cte) {
 			
 			// check whether we restart a cycle/loop and need to twiddle
 			if (full_loop_steps == 0) {
+				
+				// remember current change
+				current_change = change;
 				
 				switch (change) {
 					
@@ -237,7 +243,7 @@ void PID::UpdateError(double cte) {
 				is_converged = false;
 				
 				// display status
-				cout << "Steps: " << full_loop_steps << " Change: " << change << " Kp: " << Kp << " Ki: " << Ki << " Kd: " << Kd << endl;
+				cout << "Current change: " << current_change << " Kp: " << Kp << " Ki: " << Ki << " Kd: " << Kd << " Next change: " << change << endl;
 				
 			}
 			
