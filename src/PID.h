@@ -67,7 +67,7 @@ class PID {
 	bool is_converged = false;
 	unsigned int converge_steps = 0;
 	unsigned int full_loop_steps = 0;
-	unsigned int change = INCREASE_KP;
+	unsigned int change = 0;
 	
 };
 
