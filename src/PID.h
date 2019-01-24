@@ -4,6 +4,8 @@
 #include <limits>
 
 // define constants
+const bool bFILEOUTPUT = true;
+const string OUTPUT_FILENAME = "out.txt";
 const bool TWIDDLE = true;
 const unsigned int NUM_CONVERGED_STEPS = 100;
 const unsigned int NUM_LOOP_STEPS = 2000;

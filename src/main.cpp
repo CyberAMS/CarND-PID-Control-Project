@@ -1,3 +1,4 @@
+// #include <fstream>
 #include <math.h>
 #include <uWS/uWS.h>
 #include <iostream>
@@ -30,7 +31,12 @@ string hasData(string s) {
   return "";
 }
 
+// define file for redirecting standard output and append
+ofstream out(OUTPUT_FILENAME, fstream::app);
+streambuf *coutbuf = cout.rdbuf(); // save screen object
+
 int main() {
+	
   uWS::Hub h;
 
   PID pid;
@@ -46,7 +52,14 @@ int main() {
     // The 2 signifies a websocket event
     if (length && length > 2 && data[0] == '4' && data[1] == '2') {
       auto s = hasData(string(data).substr(0, length));
-
+			
+			// redirect standard output to file if necessary
+			if (bFILEOUTPUT) {
+				
+				cout.rdbuf(out.rdbuf());
+				
+			}
+			
       if (s != "") {
         auto j = json::parse(s);
 
@@ -83,6 +96,14 @@ int main() {
         string msg = "42[\"manual\",{}]";
         ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
       }
+			
+			// set standard output to screen if necessary
+			if (bFILEOUTPUT) {
+				
+				cout.rdbuf(coutbuf);
+				
+			}
+			
     }  // end websocket message if
   }); // end h.onMessage
 
