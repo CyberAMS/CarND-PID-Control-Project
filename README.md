@@ -121,10 +121,11 @@ steer_value = max(min(steer_value, 1.0), -1.0);
 
 ### 2. Twiddle algorithm
 
-Before we record the cross track error `cte` over a full loop of the track as `error`, we need to set the new control gains and then wait a few steps until the control behavior settles on these parameters. After each full loop the Twiddle algorithm varies one of the three PID controller parameters at a time. And for each gain it first tries to increase the value. If this leads to an improvement, the algorithm remembers that larger gain changes might make sense and then jumps to the next control parameter. If it doesn't lead to an improvement, it tries the decrease the gain. If this leads to an improvement, the algorithm remembers that larger gain changes might make sense and then jumps to the next control parameter. If not, the algorithm remembers that smaller gain changes 
+Before we record the cross track error `cte` over a full loop of the track as `error`, we need to set the new control gains and then wait a few steps until the control behavior settles on these parameters.
 
+After each full loop the Twiddle algorithm varies one of the three PID controller parameters at a time. And for each gain it first tries to increase the value. If this leads to an improvement, the algorithm remembers that larger gain changes might make sense and then jumps to the next control parameter. If it doesn't lead to an improvement, it tries the decrease the gain. If this leads to an improvement, the algorithm remembers that larger gain changes might make sense and then jumps to the next control parameter. If not, the algorithm reverts to the original gain value and remembers that smaller gain changes might make sense and then jumps to the next control parameter.
 
-  and then decrease it.
+Cycling through all three PID controller parameters with the option to either increase or decrease the value leads to 6 possible changes as shown in the following:
 
 ```C
 // determine full loop status
@@ -193,7 +194,8 @@ if (!is_converged) {
 					
 				} else {
 					
-					// reduce changing controller parameter
+					// revert and reduce changing controller parameter
+					Kp += dKp;
 					dKp *= 0.9;
 					
 				}
@@ -239,7 +241,8 @@ if (!is_converged) {
 					
 				} else {
 					
-					// reduce changing controller parameter
+					// revert and reduce changing controller parameter
+					Ki += dKi;
 					dKi *= 0.9;
 					
 				}
@@ -285,7 +288,8 @@ if (!is_converged) {
 					
 				} else {
 					
-					// reduce changing controller parameter
+					// revert and reduce changing controller parameter
+					Kd += dKd;
 					dKd *= 0.9;
 					
 				}
