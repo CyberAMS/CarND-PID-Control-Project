@@ -30,7 +30,7 @@ void PID::Init(double Kp_, double Ki_, double Kd_) {
 	is_converged = false;
 	converge_steps = 0;
 	full_loop_steps = 0;
-	change = INCREASE_KP;
+	change = 0;
 	
 	// initialize PID parameters
 	Kp = Kp_;
@@ -92,7 +92,7 @@ void PID::UpdateError(double cte) {
 				
 				switch (change) {
 					
-					case INCREASE_KP:
+					case 0:
 						
 						// adjust controller parameter
 						Kp += dKp;
@@ -114,7 +114,7 @@ void PID::UpdateError(double cte) {
 						
 						break; // switch
 						
-					case DECREASE_KP:
+					case 1:
 						
 						// adjust controller parameter
 						Kp -= 2 * dKp;
@@ -138,7 +138,7 @@ void PID::UpdateError(double cte) {
 						
 						break; // switch
 						
-					case INCREASE_KI:
+					case 2:
 						
 						// adjust controller parameter
 						Ki += dKi;
@@ -160,7 +160,7 @@ void PID::UpdateError(double cte) {
 						
 						break; // switch
 						
-					case DECREASE_KI:
+					case 3:
 						
 						// adjust controller parameter
 						Ki -= 2 * dKi;
@@ -184,7 +184,7 @@ void PID::UpdateError(double cte) {
 						
 						break; // switch
 						
-					case INCREASE_KD:
+					case 4:
 						
 						// adjust controller parameter
 						Kd += dKd;
@@ -206,7 +206,7 @@ void PID::UpdateError(double cte) {
 						
 						break; // switch
 						
-					case DECREASE_KD:
+					case 5:
 						
 						// adjust controller parameter
 						Kd -= 2 * dKd;
