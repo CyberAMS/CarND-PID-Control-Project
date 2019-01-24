@@ -2,17 +2,14 @@
 #define PID_H
 
 // define constants
-const bool DO_TWIDDLE = false; 
-dp = {0.1*Kp,0.1*Kd,0.1*Ki}; 
-step = 1; 
-param_index = 2;  // this will wrap back to 0 after the first twiddle loop 
-n_settle_steps = 100; 
-n_eval_steps = 2000; 
-total_error = 0; 
-best_error = std::numeric_limits<double>::max(); 
-tried_adding = false;  
-tried_subtracting = false; 
-
+const bool TWIDDLE = true;
+unsigned int NUM_CONVERGED_STEPS = 100;
+unsigned int NUM_LOOP_STEPS = 2000;
+double DEFAULT_KP = 0.2;
+double DEFAULT_KI = 0.0001;
+double DEFAULT_KD = 3.0;
+double TWIDDLE_FACTOR = 10.0;
+enum change_states = {INCREASE_KP, DECREASE_KP, INCREASE_KI, DECREASE_KI, INCREASE_KD, DECREASE_KD};
 
 class PID {
  public:
@@ -48,16 +45,28 @@ class PID {
   /**
    * PID Errors
    */
-  double p_error;
-  double i_error;
-  double d_error;
+  double p_error = 0.0;
+  double i_error = 0.0;
+  double d_error = 0.0;
+	double error = 0.0;
+	double best_error = std::numeric_limits<double>::max();
 
   /**
    * PID Coefficients
    */ 
-  double Kp;
-  double Ki;
-  double Kd;
+  double Kp = DEFAULT_KP;
+  double Ki = DEFAULT_KP;
+  double Kd = DEFAULT_KD;
+	double dKp = DEFAULT_KP / TWIDDLE_FACTOR;
+	double dKi = DEFAULT_KI / TWIDDLE_FACTOR;
+	double dKd = DEFAULT_KD / TWIDDLE_FACTOR;
+	
+	// status variables
+	bool is_converged = false;
+	unsigned int converge_steps = 0;
+	unsigned int full_loop_steps = 0;
+	change_states change = INCREASE_KP;
+	
 };
 
 #endif  // PID_H
