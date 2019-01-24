@@ -101,11 +101,213 @@ const unsigned int NUM_CHANGE_STATES = 6;
 
 ### 1. PID controller
 
-XXX
+The main control functions of the PID controller are implemented with the following code:
+
+```C
+// calculate error terms
+d_error = cte - p_error;
+p_error = cte;
+i_error += cte;
+
+...
+
+// calculate steering angle
+steer_value = -((Kp * p_error) + (Kd * d_error) + (Ki * i_error));
+
+// limit steering angle
+steer_value = max(min(steer_value, 1.0), -1.0);
+
+```
 
 ### 2. Twiddle algorithm
 
-XXX
+Before we record the cross track error `cte` over a full loop of the track as `error`, we need to set the new control gains and then wait a few steps until the control behavior settles on these parameters. After each full loop the Twiddle algorithm varies one of the three PID controller parameters at a time. And for each gain it first tries to increase the value. If this leads to an improvement, the algorithm remembers that larger gain changes might make sense and then jumps to the next control parameter. If it doesn't lead to an improvement, it tries the decrease the gain. If this leads to an improvement, the algorithm remembers that larger gain changes might make sense and then jumps to the next control parameter. If not, the algorithm remembers that smaller gain changes 
+
+
+  and then decrease it.
+
+```C
+// determine full loop status
+full_loop_steps = fmod((full_loop_steps + 1), (NUM_CONVERGED_STEPS + NUM_LOOP_STEPS));
+
+// check whether controller is converged
+if (!is_converged) {
+	
+	// increase counter to converged state
+	converge_steps += 1;
+	
+	// check whether necessary conversion steps are reached
+	if (converge_steps >= NUM_CONVERGED_STEPS) {
+		
+		// set converged status to true
+		is_converged = true;
+		
+	}
+	
+} else {
+	
+	// increase error
+	error += fabs(cte);
+	
+	// check whether we restart a cycle/loop and need to twiddle
+	if (full_loop_steps == 0) {
+		
+		// remember current change
+		current_change = change;
+		
+		switch (change) {
+			
+			case 0:
+				
+				// adjust controller parameter
+				Kp += dKp;
+				
+				// check whether last error is an improvement
+				if (error < best_error) {
+					
+					// remember best error, increase changing controller parameter and move to next controller parameter
+					best_error = error;
+					dKp *= 1.1;
+					change = fmod((change + 2), NUM_CHANGE_STATES);
+					
+				} else {
+					
+					// move to next change
+					change = fmod((change + 1), NUM_CHANGE_STATES);
+					
+				}
+				
+				break; // switch
+				
+			case 1:
+				
+				// adjust controller parameter
+				Kp -= 2 * dKp;
+				
+				// check whether last error is an improvement
+				if (error < best_error) {
+					
+					// remember best error and increase changing controller parameter
+					best_error = error;
+					dKp *= 1.1;
+					
+				} else {
+					
+					// reduce changing controller parameter
+					dKp *= 0.9;
+					
+				}
+				
+				// move to next change
+				change = fmod((change + 1), NUM_CHANGE_STATES);
+				
+				break; // switch
+				
+			case 2:
+				
+				// adjust controller parameter
+				Ki += dKi;
+				
+				// check whether last error is an improvement
+				if (error < best_error) {
+					
+					// remember best error, increase changing controller parameter and move to next controller parameter
+					best_error = error;
+					dKi *= 1.1;
+					change = fmod((change + 2), NUM_CHANGE_STATES);
+					
+				} else {
+					
+					// move to next change
+					change = fmod((change + 1), NUM_CHANGE_STATES);
+					
+				}
+				
+				break; // switch
+				
+			case 3:
+				
+				// adjust controller parameter
+				Ki -= 2 * dKi;
+				
+				// check whether last error is an improvement
+				if (error < best_error) {
+					
+					// remember best error and increase changing controller parameter
+					best_error = error;
+					dKi *= 1.1;
+					
+				} else {
+					
+					// reduce changing controller parameter
+					dKi *= 0.9;
+					
+				}
+				
+				// move to next change
+				change = fmod((change + 1), NUM_CHANGE_STATES);
+				
+				break; // switch
+				
+			case 4:
+				
+				// adjust controller parameter
+				Kd += dKd;
+				
+				// check whether last error is an improvement
+				if (error < best_error) {
+					
+					// remember best error, increase changing controller parameter and move to next controller parameter
+					best_error = error;
+					dKd *= 1.1;
+					change = fmod((change + 2), NUM_CHANGE_STATES);
+					
+				} else {
+					
+					// move to next change
+					change = fmod((change + 1), NUM_CHANGE_STATES);
+					
+				}
+				
+				break; // switch
+				
+			case 5:
+				
+				// adjust controller parameter
+				Kd -= 2 * dKd;
+				
+				// check whether last error is an improvement
+				if (error < best_error) {
+					
+					// remember best error and increase changing controller parameter
+					best_error = error;
+					dKd *= 1.1;
+					
+				} else {
+					
+					// reduce changing controller parameter
+					dKd *= 0.9;
+					
+				}
+				
+				// move to next change
+				change = fmod((change + 1), NUM_CHANGE_STATES);
+				
+				break; // switch
+				
+		}
+		
+		// prepare next twiddle cycle/loop
+		error = 0.0;
+		is_converged = false;
+		
+		// display status
+		cout << "Current change: " << current_change << " Kp: " << Kp << " Ki: " << Ki << " Kd: " << Kd << " Next change: " << change << endl;
+		
+	}
+	
+}
+```
 
 ## 4. Execution
 

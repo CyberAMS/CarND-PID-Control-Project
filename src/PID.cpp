@@ -134,7 +134,8 @@ void PID::UpdateError(double cte) {
 							
 						} else {
 							
-							// reduce changing controller parameter
+							// revert and reduce changing controller parameter
+							Kp += dKp;
 							dKp *= 0.9;
 							
 						}
@@ -180,7 +181,8 @@ void PID::UpdateError(double cte) {
 							
 						} else {
 							
-							// reduce changing controller parameter
+							// revert and reduce changing controller parameter
+							Ki += dKi;
 							dKi *= 0.9;
 							
 						}
@@ -226,7 +228,8 @@ void PID::UpdateError(double cte) {
 							
 						} else {
 							
-							// reduce changing controller parameter
+							// revert and reduce changing controller parameter
+							Kd += dKd;
 							dKd *= 0.9;
 							
 						}
