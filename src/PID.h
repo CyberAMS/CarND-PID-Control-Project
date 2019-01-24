@@ -5,13 +5,13 @@
 
 // define constants
 const bool TWIDDLE = true;
-unsigned int NUM_CONVERGED_STEPS = 100;
-unsigned int NUM_LOOP_STEPS = 2000;
-double DEFAULT_KP = 0.2;
-double DEFAULT_KI = 0.0001;
-double DEFAULT_KD = 3.0;
-double TWIDDLE_FACTOR = 10.0;
-unsigned int NUM_CHANGE_STATES = 6;
+const unsigned int NUM_CONVERGED_STEPS = 100;
+const unsigned int NUM_LOOP_STEPS = 2000;
+const double DEFAULT_KP = 0.2;
+const double DEFAULT_KI = 0.0001;
+const double DEFAULT_KD = 3.0;
+const double TWIDDLE_FACTOR = 10.0;
+const unsigned int NUM_CHANGE_STATES = 6;
 
 class PID {
  public:
