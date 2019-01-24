@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <string>
 #include <cmath>
@@ -48,7 +49,7 @@ void PID::Init(double Kp_, double Ki_, double Kd_) {
 	best_error = std::numeric_limits<double>::max();
 	
 	// display status
-	cout << "Current change: X" << " Kp: " << Kp << " Ki: " << Ki << " Kd: " << Kd << " Next change: " << change << " Best error: " << best_error << endl;
+	cout << setw(DISPLAY_COLUMN_WIDTH) << setfill(' ') << "Current change: " << "X" << " Kp: " << Kp << " Ki: " << Ki << " Kd: " << Kd << " Best error: " << best_error << " Next change: " << change << endl;
 	
 }
 
@@ -246,7 +247,7 @@ void PID::UpdateError(double cte) {
 				is_converged = false;
 				
 				// display status
-				cout << "Current change: " << current_change << " Kp: " << Kp << " Ki: " << Ki << " Kd: " << Kd << " Next change: " << change << " Best error: " << best_error << endl;
+				cout << setw(DISPLAY_COLUMN_WIDTH) << setfill(' ') << "Current change: " << current_change << " Kp: " << Kp << " Ki: " << Ki << " Kd: " << Kd << " Best error: " << best_error << " Next change: " << change << endl;
 				
 			}
 			

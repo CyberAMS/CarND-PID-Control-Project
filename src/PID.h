@@ -12,6 +12,7 @@ const double DEFAULT_KI = 0.0001;
 const double DEFAULT_KD = 3.0;
 const double TWIDDLE_FACTOR = 10.0;
 const unsigned int NUM_CHANGE_STATES = 6;
+const unsigned int DISPLAY_COLUMN_WIDTH = 16;
 
 class PID {
  public:
