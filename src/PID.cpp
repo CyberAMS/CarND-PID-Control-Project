@@ -259,7 +259,7 @@ double PID::TotalError() {
 	steer_value = -((Kp * p_error) + (Kd * d_error) + (Ki * i_error));
 	
 	// limit steering angle
-	steer_value = max(min(steer_value, 1), -1);
+	steer_value = max(min(steer_value, 1.0), -1.0);
 	
 	return steer_value;  // TODO: Add your total error calc here!
 	
