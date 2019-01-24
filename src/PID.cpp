@@ -58,7 +58,7 @@ void PID::UpdateError(double cte) {
    */
 	
 	// define variables
-	current_change = 0;
+	unsigned int current_change = 0;
 	
 	// calculate error terms
 	d_error = cte - p_error;

@@ -1,4 +1,4 @@
-# Project: Path Planning
+# Project: PID Controller
 
 This project has been prepared by Andre Strobel.
 
