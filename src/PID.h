@@ -1,6 +1,8 @@
 #ifndef PID_H
 #define PID_H
 
+#include <limits>
+
 // define constants
 const bool TWIDDLE = true;
 unsigned int NUM_CONVERGED_STEPS = 100;

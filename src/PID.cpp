@@ -1,9 +1,15 @@
+#include <iostream>
+#include <sstream>
+#include <string>
 #include <cmath>
+#include <algorithm>
+#include <limits>
 #include "PID.h"
 
 using std::fabs;
 using std::min;
 using std::max;
+using std::fmod;
 
 /**
  * TODO: Complete the PID class. You may add any additional desired functions.
@@ -58,7 +64,7 @@ void PID::UpdateError(double cte) {
 	if (TWIDDLE) {
 		
 		// determine full loop status
-		full_loop_steps = mod((loop_steps + 1), (NUM_CONVERGED_STEPS + NUM_LOOP_STEPS));
+		full_loop_steps = fmod((full_loop_steps + 1), (NUM_CONVERGED_STEPS + NUM_LOOP_STEPS));
 		
 		// check whether controller is converged
 		if (!is_converged) {
@@ -95,12 +101,12 @@ void PID::UpdateError(double cte) {
 							// remember best error, increase changing controller parameter and move to next controller parameter
 							best_error = error;
 							dKp *= 1.1;
-							change = mod((change + 2), NUM_CHANGE_STATES);
+							change = fmod((change + 2), NUM_CHANGE_STATES);
 							
 						} else {
 							
 							// move to next change
-							change = mod((change + 1), NUM_CHANGE_STATES);
+							change = fmod((change + 1), NUM_CHANGE_STATES);
 							
 						}
 						
@@ -126,7 +132,7 @@ void PID::UpdateError(double cte) {
 						}
 						
 						// move to next change
-						change = mod((change + 1), NUM_CHANGE_STATES);
+						change = fmod((change + 1), NUM_CHANGE_STATES);
 						
 						break; // switch
 						
@@ -141,12 +147,12 @@ void PID::UpdateError(double cte) {
 							// remember best error, increase changing controller parameter and move to next controller parameter
 							best_error = error;
 							dKi *= 1.1;
-							change = mod((change + 2), NUM_CHANGE_STATES);
+							change = fmod((change + 2), NUM_CHANGE_STATES);
 							
 						} else {
 							
 							// move to next change
-							change = mod((change + 1), NUM_CHANGE_STATES);
+							change = fmod((change + 1), NUM_CHANGE_STATES);
 							
 						}
 						
@@ -172,7 +178,7 @@ void PID::UpdateError(double cte) {
 						}
 						
 						// move to next change
-						change = mod((change + 1), NUM_CHANGE_STATES);
+						change = fmod((change + 1), NUM_CHANGE_STATES);
 						
 						break; // switch
 						
@@ -187,12 +193,12 @@ void PID::UpdateError(double cte) {
 							// remember best error, increase changing controller parameter and move to next controller parameter
 							best_error = error;
 							dKd *= 1.1;
-							change = mod((change + 2), NUM_CHANGE_STATES);
+							change = fmod((change + 2), NUM_CHANGE_STATES);
 							
 						} else {
 							
 							// move to next change
-							change = mod((change + 1), NUM_CHANGE_STATES);
+							change = fmod((change + 1), NUM_CHANGE_STATES);
 							
 						}
 						
@@ -218,7 +224,7 @@ void PID::UpdateError(double cte) {
 						}
 						
 						// move to next change
-						change = mod((change + 1), NUM_CHANGE_STATES);
+						change = fmod((change + 1), NUM_CHANGE_STATES);
 						
 						break; // switch
 						
