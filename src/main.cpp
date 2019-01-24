@@ -37,6 +37,13 @@ streambuf *coutbuf = cout.rdbuf(); // save screen object
 
 int main() {
 	
+	// redirect standard output to file if necessary
+	if (bFILEOUTPUT) {
+		
+		cout.rdbuf(out.rdbuf());
+		
+	}
+	
   uWS::Hub h;
 
   PID pid;
@@ -44,7 +51,14 @@ int main() {
    * TODO: Initialize the pid variable.
    */
 	pid.Init(DEFAULT_KP , DEFAULT_KI , DEFAULT_KD);
-
+	
+	// set standard output to screen if necessary
+	if (bFILEOUTPUT) {
+		
+		cout.rdbuf(coutbuf);
+		
+	}
+	
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, 
                      uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
