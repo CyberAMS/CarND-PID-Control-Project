@@ -48,7 +48,7 @@ void PID::Init(double Kp_, double Ki_, double Kd_) {
 	best_error = std::numeric_limits<double>::max();
 	
 	// display status
-	cout << "Steps: " << full_loop_steps << " Change: " << change << " Kp: " << Kp << " Ki: " << Ki << " Kd: " << Kd << endl;
+	cout << "Current change: X" << " Kp: " << Kp << " Ki: " << Ki << " Kd: " << Kd << " Next change: " << change << endl;
 	
 }
 
