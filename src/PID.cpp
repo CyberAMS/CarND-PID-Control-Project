@@ -10,6 +10,8 @@ using std::fabs;
 using std::min;
 using std::max;
 using std::fmod;
+using std::cout;
+using std::endl;
 
 /**
  * TODO: Complete the PID class. You may add any additional desired functions.
@@ -28,7 +30,7 @@ void PID::Init(double Kp_, double Ki_, double Kd_) {
 	is_converged = false;
 	converge_steps = 0;
 	full_loop_steps = 0;
-	change_states change = INCREASE_KP;
+	change = INCREASE_KP;
 	
 	// initialize PID parameters
 	Kp = Kp_;
