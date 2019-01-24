@@ -95,12 +95,12 @@ void PID::UpdateError(double cte) {
 							// remember best error, increase changing controller parameter and move to next controller parameter
 							best_error = error;
 							dKp *= 1.1;
-							change = mod((change + 2), change_states.size());
+							change = mod((change + 2), NUM_CHANGE_STATES);
 							
 						} else {
 							
 							// move to next change
-							change = mod((change + 1), change_states.size());
+							change = mod((change + 1), NUM_CHANGE_STATES);
 							
 						}
 						
@@ -126,7 +126,7 @@ void PID::UpdateError(double cte) {
 						}
 						
 						// move to next change
-						change = mod((change + 1), change_states.size());
+						change = mod((change + 1), NUM_CHANGE_STATES);
 						
 						break; // switch
 						
@@ -141,12 +141,12 @@ void PID::UpdateError(double cte) {
 							// remember best error, increase changing controller parameter and move to next controller parameter
 							best_error = error;
 							dKi *= 1.1;
-							change = mod((change + 2), change_states.size());
+							change = mod((change + 2), NUM_CHANGE_STATES);
 							
 						} else {
 							
 							// move to next change
-							change = mod((change + 1), change_states.size());
+							change = mod((change + 1), NUM_CHANGE_STATES);
 							
 						}
 						
@@ -172,7 +172,7 @@ void PID::UpdateError(double cte) {
 						}
 						
 						// move to next change
-						change = mod((change + 1), change_states.size());
+						change = mod((change + 1), NUM_CHANGE_STATES);
 						
 						break; // switch
 						
@@ -187,12 +187,12 @@ void PID::UpdateError(double cte) {
 							// remember best error, increase changing controller parameter and move to next controller parameter
 							best_error = error;
 							dKd *= 1.1;
-							change = mod((change + 2), change_states.size());
+							change = mod((change + 2), NUM_CHANGE_STATES);
 							
 						} else {
 							
 							// move to next change
-							change = mod((change + 1), change_states.size());
+							change = mod((change + 1), NUM_CHANGE_STATES);
 							
 						}
 						
@@ -218,7 +218,7 @@ void PID::UpdateError(double cte) {
 						}
 						
 						// move to next change
-						change = mod((change + 1), change_states.size());
+						change = mod((change + 1), NUM_CHANGE_STATES);
 						
 						break; // switch
 						

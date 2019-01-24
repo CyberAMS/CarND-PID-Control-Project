@@ -9,7 +9,8 @@ double DEFAULT_KP = 0.2;
 double DEFAULT_KI = 0.0001;
 double DEFAULT_KD = 3.0;
 double TWIDDLE_FACTOR = 10.0;
-enum change_states = {INCREASE_KP, DECREASE_KP, INCREASE_KI, DECREASE_KI, INCREASE_KD, DECREASE_KD};
+enum CHANGE_STATES {INCREASE_KP, DECREASE_KP, INCREASE_KI, DECREASE_KI, INCREASE_KD, DECREASE_KD};
+unsigned int NUM_CHANGE_STATES = 6;
 
 class PID {
  public:
@@ -65,7 +66,7 @@ class PID {
 	bool is_converged = false;
 	unsigned int converge_steps = 0;
 	unsigned int full_loop_steps = 0;
-	change_states change = INCREASE_KP;
+	CHANGE_STATES change = INCREASE_KP;
 	
 };
 
