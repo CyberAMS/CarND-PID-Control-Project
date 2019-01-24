@@ -85,7 +85,7 @@ void PID::UpdateError(double cte) {
 		} else {
 			
 			// increase error
-			error += fabs(cte)
+			error += fabs(cte);
 			
 			// check whether we restart a cycle/loop and need to twiddle
 			if (full_loop_steps == 0) {
