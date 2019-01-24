@@ -4,6 +4,8 @@
 #include <string>
 #include <limits>
 
+using std::string;
+
 // define constants
 const bool bFILEOUTPUT = true;
 const string OUTPUT_FILENAME = "out.txt";
