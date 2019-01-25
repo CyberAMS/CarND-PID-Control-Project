@@ -116,7 +116,6 @@ steer_value = -((Kp * p_error) + (Kd * d_error) + (Ki * i_error));
 
 // limit steering angle
 steer_value = max(min(steer_value, 1.0), -1.0);
-
 ```
 
 ### 2. Twiddle algorithm
@@ -354,3 +353,12 @@ Current change: 2 Kp: 0.19800 Ki: 9.891e-05 Kd: 3.000 Best error: 475.731      N
 I only implemented the tuning of the PID controller parameters for a fixed throttle/speed value. In the example above the throttle value has been selected as 30%. The throttle influences the speed range and the speed significantly influences the lateral dynamics of the vehicle. Therefore, the PID controller parameters should be tuned for different throttle settings. These values should be put into look-up tables that define all gains depending on the throttle value.
 
 While having higher steering angles when going through curves the speed drops with a constant throttle setting. Therefore, an additional PID speed controller can help keep the speed at a constant value at all times. The parameters of this PID speed controller should be twiddled after the optimal parameters for the PID steering controller have been determined.
+
+Finally, the PID steering controller can further be improved by using the output steering angle signal `steering_angle` from the [Behavioral Cloning](https://github.com/CyberAMS/CarND-Behavioral-Cloning-P3/) project as [feedforward control](https://en.wikipedia.org/wiki/Feed_forward_(control)):
+
+```C
+// calculate steering angle
+steer_value = steering_angle - ((Kp * p_error) + (Kd * d_error) + (Ki * i_error));
+```
+
+In this case the steering angle `steering_angle` is estimated based on the trained behavior. The PID steering controller only needs to compensate for the errors in this estimation and not take care of the complete steering angle signal `steer_value`. Therefore, the Twiddle tuning will result in different PID control parameters which are typically much smaller than without the feedforward control. As a result the control behavior will be much smoother.
