@@ -324,18 +324,27 @@ The program is compiled using the `.\build.sh` command. After this it can be sta
 XXX
 
 ```
-Current change: X Kp: 0.2 Ki: 0.0001 Kd: 3 Best error: 1.79769e+308 Next change: 0
-Current change: 0 Kp: 0.22 Ki: 0.0001 Kd: 3 Best error: 555.198 Next change: 2
-Current change: 2 Kp: 0.22 Ki: 0.00011 Kd: 3 Best error: 555.198 Next change: 3
-Current change: 3 Kp: 0.22 Ki: 9e-05 Kd: 3 Best error: 509.707 Next change: 4
-Current change: 4 Kp: 0.22 Ki: 9e-05 Kd: 3.3 Best error: 509.707 Next change: 5
-Current change: 5 Kp: 0.22 Ki: 9e-05 Kd: 2.7 Best error: 503.823 Next change: 0
-Current change: 0 Kp: 0.242 Ki: 9e-05 Kd: 2.7 Best error: 503.823 Next change: 1
-Current change: 1 Kp: 0.22 Ki: 9e-05 Kd: 2.7 Best error: 503.823 Next change: 2
-Current change: 2 Kp: 0.22 Ki: 0.000101 Kd: 2.7 Best error: 503.823 Next change: 3
-Current change: 3 Kp: 0.22 Ki: 9e-05 Kd: 2.7 Best error: 503.823 Next change: 4
-Current change: 4 Kp: 0.22 Ki: 9e-05 Kd: 3.03 Best error: 503.823 Next change: 5
-Current change: 5 Kp: 0.22 Ki: 9e-05 Kd: 2.7 Best error: 503.823 Next change: 0
+Current change: X Kp: 0.20000 Ki: 0.00010   Kd: 3.000 Best error: 1.79769e+308 Next change: 0
+Current change: 0 Kp: 0.22000 Ki: 0.00010   Kd: 3.000 Best error: 551.337      Next change: 2
+Current change: 2 Kp: 0.22000 Ki: 0.00011   Kd: 3.000 Best error: 551.337      Next change: 3
+Current change: 3 Kp: 0.22000 Ki: 9e-05     Kd: 3.000 Best error: 504.215      Next change: 4
+Current change: 4 Kp: 0.22000 Ki: 9e-05     Kd: 3.300 Best error: 504.215      Next change: 5
+Current change: 5 Kp: 0.22000 Ki: 9e-05     Kd: 3.000 Best error: 504.215      Next change: 0
+Current change: 0 Kp: 0.24200 Ki: 9e-05     Kd: 3.000 Best error: 504.215      Next change: 1
+Current change: 1 Kp: 0.19800 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 2
+Current change: 2 Kp: 0.19800 Ki: 0.000101  Kd: 3.000 Best error: 475.731      Next change: 3
+Current change: 3 Kp: 0.19800 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 4
+Current change: 4 Kp: 0.19800 Ki: 9e-05     Kd: 3.270 Best error: 475.731      Next change: 5
+Current change: 5 Kp: 0.19800 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 0
+Current change: 0 Kp: 0.22220 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 1
+Current change: 1 Kp: 0.19800 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 2
+Current change: 2 Kp: 0.19800 Ki: 9.99e-05  Kd: 3.000 Best error: 475.731      Next change: 3
+Current change: 3 Kp: 0.19800 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 4
+Current change: 4 Kp: 0.19800 Ki: 9e-05     Kd: 3.243 Best error: 475.731      Next change: 5
+Current change: 5 Kp: 0.19800 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 0
+Current change: 0 Kp: 0.21978 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 1
+Current change: 1 Kp: 0.19800 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 2
+Current change: 2 Kp: 0.19800 Ki: 9.891e-05 Kd: 3.000 Best error: 475.731      Next change: 3
 ```
 
 <img src="docu_images/190119_StAn_Udacity_SDC_PP_start_small.gif" width="48%"> <img src="docu_images/190119_StAn_Udacity_SDC_PP_straight_01_small.gif" width="48%">
