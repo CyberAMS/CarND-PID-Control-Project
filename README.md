@@ -120,7 +120,7 @@ steer_value = max(min(steer_value, 1.0), -1.0);
 
 ### 2. Twiddle algorithm
 
-Before we record the cross track error `cte` over a full loop of the track as `error`, we need to set the new control gains and then wait a few steps until the control behavior settles on these parameters. The full loop error `error` is calculated as sum of all squared cross track errors `cte` over roughly one loop of the track. 
+Before we record the cross track error `cte` over a full loop of the track as `error`, we need to set the new control gains and then wait a few steps until the control behavior settles on these parameters. The full loop error `error` is calculated as sum of all squared cross track errors `cte` over roughly one loop of the track. We use the squared cross track errors, because individual positive and negative errors shouldn't cancel each other out and larger deviations should be avoided at all if possible.
 
 After each full loop the Twiddle algorithm varies one of the three PID controller parameters at a time. And for each gain it first tries to increase the value. If this leads to an improvement, the algorithm remembers that larger gain changes might make sense and then jumps to the next control parameter. If it doesn't lead to an improvement, it tries the decrease the gain. If this leads to an improvement, the algorithm remembers that larger gain changes might make sense and then jumps to the next control parameter. If not, the algorithm reverts to the original gain value and remembers that smaller gain changes might make sense and then jumps to the next control parameter.
 
@@ -154,13 +154,13 @@ if (!is_converged) {
 		
 		// remember current change
 		current_change = change;
+		current_Kp = Kp;
+		current_Ki = Ki;
+		current_Kd = Kd;
 		
 		switch (change) {
 			
-			case 0:
-				
-				// adjust controller parameter
-				Kp += dKp;
+			case 0: // increase Kp
 				
 				// check whether last error is an improvement
 				if (error < best_error) {
@@ -170,19 +170,22 @@ if (!is_converged) {
 					dKp *= 1.1;
 					change = fmod((change + 2), NUM_CHANGE_STATES);
 					
-				} else {
+					// adjust controller parameter for change == 2
+					Ki += dKi;
+					
+					} else {
 					
 					// move to next change
 					change = fmod((change + 1), NUM_CHANGE_STATES);
+					
+					// adjust controller parameter for change == 1
+					Kp -= 2 * dKp;
 					
 				}
 				
 				break; // switch
 				
-			case 1:
-				
-				// adjust controller parameter
-				Kp -= 2 * dKp;
+			case 1: // decrease Kp
 				
 				// check whether last error is an improvement
 				if (error < best_error) {
@@ -202,12 +205,12 @@ if (!is_converged) {
 				// move to next change
 				change = fmod((change + 1), NUM_CHANGE_STATES);
 				
+				// adjust controller parameter for change == 2
+				Ki += dKi;
+				
 				break; // switch
 				
-			case 2:
-				
-				// adjust controller parameter
-				Ki += dKi;
+			case 2: // increase Ki
 				
 				// check whether last error is an improvement
 				if (error < best_error) {
@@ -217,19 +220,22 @@ if (!is_converged) {
 					dKi *= 1.1;
 					change = fmod((change + 2), NUM_CHANGE_STATES);
 					
+					// adjust controller parameter for change == 4
+					Kd += dKd;
+					
 				} else {
 					
 					// move to next change
 					change = fmod((change + 1), NUM_CHANGE_STATES);
 					
+					// adjust controller parameter for change == 3
+					Ki -= 2 * dKi;
+					
 				}
 				
 				break; // switch
 				
-			case 3:
-				
-				// adjust controller parameter
-				Ki -= 2 * dKi;
+			case 3: // decrease Ki
 				
 				// check whether last error is an improvement
 				if (error < best_error) {
@@ -249,12 +255,12 @@ if (!is_converged) {
 				// move to next change
 				change = fmod((change + 1), NUM_CHANGE_STATES);
 				
+				// adjust controller parameter for change == 4
+				Kd += dKd;
+				
 				break; // switch
 				
-			case 4:
-				
-				// adjust controller parameter
-				Kd += dKd;
+			case 4: // increase Kd
 				
 				// check whether last error is an improvement
 				if (error < best_error) {
@@ -264,19 +270,22 @@ if (!is_converged) {
 					dKd *= 1.1;
 					change = fmod((change + 2), NUM_CHANGE_STATES);
 					
+					// adjust controller parameter for change == 0
+					Kp += dKp;
+					
 				} else {
 					
 					// move to next change
 					change = fmod((change + 1), NUM_CHANGE_STATES);
 					
+					// adjust controller parameter for change == 5
+					Kd -= 2 * dKd;
+					
 				}
 				
 				break; // switch
 				
-			case 5:
-				
-				// adjust controller parameter
-				Kd -= 2 * dKd;
+			case 5: // decrease Kd
 				
 				// check whether last error is an improvement
 				if (error < best_error) {
@@ -296,6 +305,9 @@ if (!is_converged) {
 				// move to next change
 				change = fmod((change + 1), NUM_CHANGE_STATES);
 				
+				// adjust controller parameter for change == 0
+				Kp += dKp;
+				
 				break; // switch
 				
 		}
@@ -305,7 +317,7 @@ if (!is_converged) {
 		is_converged = false;
 		
 		// display status
-		cout << "Current change: " << current_change << " Kp: " << Kp << " Ki: " << Ki << " Kd: " << Kd << " Next change: " << change << endl;
+		cout << setw(DISPLAY_COLUMN_WIDTH) << setfill(' ') << "Current change: " << current_change << " Current Kp: " << current_Kp << " Current Ki: " << current_Ki << " Current Kd: " << current_Kd << " Best error: " << best_error << " Next change: " << change << " Next Kp: " << Kp << " Next Ki: " << Ki << " Next Kd: " << Kd << endl;
 		
 	}
 	
