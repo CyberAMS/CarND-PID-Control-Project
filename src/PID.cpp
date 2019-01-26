@@ -51,7 +51,7 @@ void PID::Init(double Kp_, double Ki_, double Kd_) {
 	best_error = std::numeric_limits<double>::max();
 	
 	// display status
-	cout << setw(DISPLAY_COLUMN_WIDTH) << setfill(' ') << "Current change: " << "X" << " Current Kp: " << "X" << " Current Ki: " << "X" << " Current Kd: " << "X" << " Best error: " << best_error << " Next change: " << change << " Next Kp: " << Kp << " Next Ki: " << Ki << " Next Kd: " << Kd << endl;
+	cout << setw(DISPLAY_COLUMN_WIDTH) << setfill(' ') << "Current change: " << "X" << " Current Kp: " << "X" << " Current Ki: " << "X" << " Current Kd: " << "X" << " Current error: " << "X" << " Best error: " << best_error << " Next change: " << change << " Next Kp: " << Kp << " Next Ki: " << Ki << " Next Kd: " << Kd << endl;
 	
 }
 
@@ -259,12 +259,12 @@ void PID::UpdateError(double cte) {
 						
 				}
 				
+				// display status
+				cout << setw(DISPLAY_COLUMN_WIDTH) << setfill(' ') << "Current change: " << current_change << " Current Kp: " << current_Kp << " Current Ki: " << current_Ki << " Current Kd: " << current_Kd << " Current error: " << error << " Best error: " << best_error << " Next change: " << change << " Next Kp: " << Kp << " Next Ki: " << Ki << " Next Kd: " << Kd << endl;
+				
 				// prepare next twiddle cycle/loop
 				error = 0.0;
 				is_converged = false;
-				
-				// display status
-				cout << setw(DISPLAY_COLUMN_WIDTH) << setfill(' ') << "Current change: " << current_change << " Current Kp: " << current_Kp << " Current Ki: " << current_Ki << " Current Kd: " << current_Kd << " Best error: " << best_error << " Next change: " << change << " Next Kp: " << Kp << " Next Ki: " << Ki << " Next Kd: " << Kd << endl;
 				
 			}
 			
