@@ -7,7 +7,7 @@
 #include <limits>
 #include "PID.h"
 
-using std::fabs;
+// using std::fabs;
 using std::min;
 using std::max;
 using std::fmod;
@@ -94,7 +94,7 @@ void PID::UpdateError(double cte) {
 		} else {
 			
 			// increase error
-			error += fabs(cte);
+			error += pow(cte, 2);
 			
 			// check whether we restart a cycle/loop and need to twiddle
 			if (full_loop_steps == 0) {
