@@ -35,8 +35,8 @@ The following table shows an overview of the most important files:
 
 [//]: # (Image References)
 
-[image1]: ./docu_images/190126a_StAn_Udacity_SDC_PID_start_small.gif
-[image2]: ./docu_images/190126b_StAn_Udacity_SDC_PID_optimal_small.gif
+[image1]: ./docu_images/190126a_StAn_Udacity_SDC_PID_start_small_condensed2.gif
+[image2]: ./docu_images/190126b_StAn_Udacity_SDC_PID_optimal_small_condensed2.gif
 
 ---
 
@@ -452,7 +452,7 @@ Also, some parameter settings lead to the vehicle leaving the track or getting s
 
 The following animations shows a short section of the track with the starting controller parameters `DEFAULT_KP = 0.2`, `DEFAULT_KI = 0.0001` and `DEFAULT_KD = 3.0` on the left and the optimal controller parameters `KP = 0.259742`, `KI = 0.000104` and `KD = 2.646120` on the right.
 
-<img src="docu_images/190126a_StAn_Udacity_SDC_PID_start_small.gif" width="48%"> <img src="docu_images/190126b_StAn_Udacity_SDC_PID_optimal_small.gif" width="48%">
+<img src="docu_images/190126a_StAn_Udacity_SDC_PID_start_small_condensed2.gif" width="48%"> <img src="docu_images/190126b_StAn_Udacity_SDC_PID_optimal_small_condensed2.gif" width="48%">
 
 It is important to mention that the stability of the PID controller and the controller parameters are also highly dependend on the dead time of the computer system from sending a new steering angle to the vehicle to receiving a new cross track error from the simulator. The faster the computer system the more exchanges happen and the more stable the control.
 
