@@ -35,9 +35,8 @@ The following table shows an overview of the most important files:
 
 [//]: # (Image References)
 
-[image1]: ./docu_images/190120_StAn_Path_Planning_Program_Flow.jpg
-[image2]: ./docu_images/190120_StAn_Finite_State_Model.jpg
-[image3]: ./docu_images/190120_StAn_Frenet_Problem.jpg
+[image1]: ./docu_images/190126a_StAn_Udacity_SDC_PID_start_small.gif
+[image2]: ./docu_images/190126b_StAn_Udacity_SDC_PID_optimal_small.gif
 
 ---
 
@@ -122,7 +121,7 @@ steer_value = max(min(steer_value, 1.0), -1.0);
 
 Before we record the cross track error `cte` over a full loop of the track as `error`, we need to set the new control gains and then wait a few steps until the control behavior settles on these parameters. The full loop error `error` is calculated as sum of all squared cross track errors `cte` over roughly one loop of the track. We use the squared cross track errors, because individual positive and negative errors shouldn't cancel each other out and larger deviations should be avoided at all if possible.
 
-After each full loop the Twiddle algorithm varies one of the three PID controller parameters at a time. And for each gain it first tries to increase the value. If this leads to an improvement, the algorithm remembers that larger gain changes might make sense and then jumps to the next control parameter. If it doesn't lead to an improvement, it tries the decrease the gain. If this leads to an improvement, the algorithm remembers that larger gain changes might make sense and then jumps to the next control parameter. If not, the algorithm reverts to the original gain value and remembers that smaller gain changes might make sense and then jumps to the next control parameter.
+After each full loop the Twiddle algorithm varies one of the three PID controller parameters at a time. And for each gain it first tries to increase the value. If this leads to an improvement, the algorithm remembers that larger gain changes might make sense and then jumps to the next control parameter. If it doesn't lead to an improvement, it tries the decrease the gain. If this leads to an improvement, the algorithm remembers that larger gain changes might make sense and then jumps to the next control parameter. If no change led to an improvement, the algorithm reverts to the original gain value and remembers that smaller gain changes might make sense and then jumps to the next control parameter.
 
 Cycling through all three PID controller parameters with the option to either increase or decrease the value leads to 6 possible changes as shown in the following:
 
@@ -337,21 +336,125 @@ First I needed to manually tune the controller parameters to have the car succes
 Then I used the Twiddle algorithm to further optimize the controller parameters. These are the steps the Twiddle algorithm took:
 
 ```
-Current change: X Current Kp: X Current Ki: X Current Kd: X Best error: 1.79769e+308 Next change: 0 Next Kp: 0.2 Next Ki: 0.0001 Next Kd: 3
-Current change: 0 Current Kp: 0.2 Current Ki: 0.0001 Current Kd: 3 Best error: 382.24 Next change: 2 Next Kp: 0.22 Next Ki: 0.0001 Next Kd: 3
-Current change: 2 Current Kp: 0.22 Current Ki: 0.0001 Current Kd: 3 Best error: 298.918 Next change: 4 Next Kp: 0.22 Next Ki: 0.00011 Next Kd: 3
-Current change: 4 Current Kp: 0.22 Current Ki: 0.00011 Current Kd: 3 Best error: 298.918 Next change: 5 Next Kp: 0.22 Next Ki: 0.00011 Next Kd: 3.3
-Current change: 5 Current Kp: 0.22 Current Ki: 0.00011 Current Kd: 3.3 Best error: 298.918 Next change: 0 Next Kp: 0.22 Next Ki: 0.00011 Next Kd: 3
-Current change: 0 Current Kp: 0.22 Current Ki: 0.00011 Current Kd: 3 Best error: 298.918 Next change: 1 Next Kp: 0.242 Next Ki: 0.00011 Next Kd: 3
+Current change: X Current Kp: X        Current Ki: X        Current Kd: X        Current error: X         Best error: 1.798e+308 Next change: 0 Next Kp: 0.200000 Next Ki: 0.000100 Next Kd: 3.000000
+Current change: 0 Current Kp: 0.200000 Current Ki: 0.000100 Current Kd: 3.000000 Current error:   366.267 Best error: 366.267000 Next change: 2 Next Kp: 0.200000 Next Ki: 0.000110 Next Kd: 3.000000
+Current change: 2 Current Kp: 0.200000 Current Ki: 0.000110 Current Kd: 3.000000 Current error:   317.012 Best error: 317.012000 Next change: 4 Next Kp: 0.200000 Next Ki: 0.000110 Next Kd: 3.300000
+Current change: 4 Current Kp: 0.200000 Current Ki: 0.000110 Current Kd: 3.300000 Current error:   432.507 Best error: 317.012000 Next change: 5 Next Kp: 0.200000 Next Ki: 0.000110 Next Kd: 2.700000
+Current change: 5 Current Kp: 0.200000 Current Ki: 0.000110 Current Kd: 2.700000 Current error:  1388.120 Best error: 317.012000 Next change: 0 Next Kp: 0.222000 Next Ki: 0.000110 Next Kd: 3.000000
+Current change: 0 Current Kp: 0.222000 Current Ki: 0.000110 Current Kd: 3.000000 Current error:   389.198 Best error: 317.012000 Next change: 1 Next Kp: 0.178000 Next Ki: 0.000110 Next Kd: 3.000000
+Current change: 1 Current Kp: 0.178000 Current Ki: 0.000110 Current Kd: 3.000000 Current error:   507.279 Best error: 317.012000 Next change: 2 Next Kp: 0.200000 Next Ki: 0.000121 Next Kd: 3.000000
+Current change: 2 Current Kp: 0.200000 Current Ki: 0.000121 Current Kd: 3.000000 Current error:   407.556 Best error: 317.012000 Next change: 3 Next Kp: 0.200000 Next Ki: 0.000099 Next Kd: 3.000000
+Current change: 3 Current Kp: 0.200000 Current Ki: 0.000099 Current Kd: 3.000000 Current error:   442.980 Best error: 317.012000 Next change: 4 Next Kp: 0.200000 Next Ki: 0.000110 Next Kd: 3.270000
+Current change: 4 Current Kp: 0.200000 Current Ki: 0.000110 Current Kd: 3.270000 Current error:   366.363 Best error: 317.012000 Next change: 5 Next Kp: 0.200000 Next Ki: 0.000110 Next Kd: 2.730000
+Current change: 5 Current Kp: 0.200000 Current Ki: 0.000110 Current Kd: 2.730000 Current error:   287.476 Best error: 287.476000 Next change: 0 Next Kp: 0.219800 Next Ki: 0.000110 Next Kd: 2.730000
+Current change: 0 Current Kp: 0.219800 Current Ki: 0.000110 Current Kd: 2.730000 Current error:   265.436 Best error: 265.436000 Next change: 2 Next Kp: 0.219800 Next Ki: 0.000120 Next Kd: 2.730000
+Current change: 2 Current Kp: 0.219800 Current Ki: 0.000120 Current Kd: 2.730000 Current error:   310.098 Best error: 265.436000 Next change: 3 Next Kp: 0.219800 Next Ki: 0.000100 Next Kd: 2.730000
+Current change: 3 Current Kp: 0.219800 Current Ki: 0.000100 Current Kd: 2.730000 Current error:   713.812 Best error: 265.436000 Next change: 4 Next Kp: 0.219800 Next Ki: 0.000110 Next Kd: 3.027000
+Current change: 4 Current Kp: 0.219800 Current Ki: 0.000110 Current Kd: 3.027000 Current error: 16418.800 Best error: 265.436000 Next change: 5 Next Kp: 0.219800 Next Ki: 0.000110 Next Kd: 2.433000
+Current change: 5 Current Kp: 0.219800 Current Ki: 0.000110 Current Kd: 2.433000 Current error:   885.307 Best error: 265.436000 Next change: 0 Next Kp: 0.241580 Next Ki: 0.000110 Next Kd: 2.730000
+Current change: 0 Current Kp: 0.241580 Current Ki: 0.000110 Current Kd: 2.730000 Current error:  1020.150 Best error: 265.436000 Next change: 1 Next Kp: 0.198020 Next Ki: 0.000110 Next Kd: 2.730000
+Current change: 1 Current Kp: 0.198020 Current Ki: 0.000110 Current Kd: 2.730000 Current error:   364.262 Best error: 265.436000 Next change: 2 Next Kp: 0.219800 Next Ki: 0.000119 Next Kd: 2.730000
+Current change: 2 Current Kp: 0.219800 Current Ki: 0.000119 Current Kd: 2.730000 Current error:   320.988 Best error: 265.436000 Next change: 3 Next Kp: 0.219800 Next Ki: 0.000101 Next Kd: 2.730000
+Current change: 3 Current Kp: 0.219800 Current Ki: 0.000101 Current Kd: 2.730000 Current error:   289.336 Best error: 265.436000 Next change: 4 Next Kp: 0.219800 Next Ki: 0.000110 Next Kd: 2.997300
+Current change: 4 Current Kp: 0.219800 Current Ki: 0.000110 Current Kd: 2.997300 Current error:   456.750 Best error: 265.436000 Next change: 5 Next Kp: 0.219800 Next Ki: 0.000110 Next Kd: 2.462700
+Current change: 5 Current Kp: 0.219800 Current Ki: 0.000110 Current Kd: 2.462700 Current error:   425.623 Best error: 265.436000 Next change: 0 Next Kp: 0.239402 Next Ki: 0.000110 Next Kd: 2.730000
+Current change: 0 Current Kp: 0.239402 Current Ki: 0.000110 Current Kd: 2.730000 Current error:   484.228 Best error: 265.436000 Next change: 1 Next Kp: 0.200198 Next Ki: 0.000110 Next Kd: 2.730000
+Current change: 1 Current Kp: 0.200198 Current Ki: 0.000110 Current Kd: 2.730000 Current error:   290.651 Best error: 265.436000 Next change: 2 Next Kp: 0.219800 Next Ki: 0.000118 Next Kd: 2.730000
+Current change: 2 Current Kp: 0.219800 Current Ki: 0.000118 Current Kd: 2.730000 Current error:   276.839 Best error: 265.436000 Next change: 3 Next Kp: 0.219800 Next Ki: 0.000102 Next Kd: 2.730000
+Current change: 3 Current Kp: 0.219800 Current Ki: 0.000102 Current Kd: 2.730000 Current error:   318.784 Best error: 265.436000 Next change: 4 Next Kp: 0.219800 Next Ki: 0.000110 Next Kd: 2.970570
+Current change: 4 Current Kp: 0.219800 Current Ki: 0.000110 Current Kd: 2.970570 Current error:   359.974 Best error: 265.436000 Next change: 5 Next Kp: 0.219800 Next Ki: 0.000110 Next Kd: 2.489430
+Current change: 5 Current Kp: 0.219800 Current Ki: 0.000110 Current Kd: 2.489430 Current error:   363.069 Best error: 265.436000 Next change: 0 Next Kp: 0.237442 Next Ki: 0.000110 Next Kd: 2.730000
+Current change: 0 Current Kp: 0.237442 Current Ki: 0.000110 Current Kd: 2.730000 Current error:   283.794 Best error: 265.436000 Next change: 1 Next Kp: 0.202158 Next Ki: 0.000110 Next Kd: 2.730000
+Current change: 1 Current Kp: 0.202158 Current Ki: 0.000110 Current Kd: 2.730000 Current error:   301.927 Best error: 265.436000 Next change: 2 Next Kp: 0.219800 Next Ki: 0.000117 Next Kd: 2.730000
+Current change: 2 Current Kp: 0.219800 Current Ki: 0.000117 Current Kd: 2.730000 Current error:   363.878 Best error: 265.436000 Next change: 3 Next Kp: 0.219800 Next Ki: 0.000103 Next Kd: 2.730000
+Current change: 3 Current Kp: 0.219800 Current Ki: 0.000103 Current Kd: 2.730000 Current error:   275.332 Best error: 265.436000 Next change: 4 Next Kp: 0.219800 Next Ki: 0.000110 Next Kd: 2.946510
+Current change: 4 Current Kp: 0.219800 Current Ki: 0.000110 Current Kd: 2.946510 Current error:   299.762 Best error: 265.436000 Next change: 5 Next Kp: 0.219800 Next Ki: 0.000110 Next Kd: 2.513490
+Current change: 5 Current Kp: 0.219800 Current Ki: 0.000110 Current Kd: 2.513490 Current error:   387.683 Best error: 265.436000 Next change: 0 Next Kp: 0.235678 Next Ki: 0.000110 Next Kd: 2.730000
+Current change: 0 Current Kp: 0.235678 Current Ki: 0.000110 Current Kd: 2.730000 Current error:   256.504 Best error: 256.504000 Next change: 2 Next Kp: 0.235678 Next Ki: 0.000116 Next Kd: 2.730000
+Current change: 2 Current Kp: 0.235678 Current Ki: 0.000116 Current Kd: 2.730000 Current error:   262.096 Best error: 256.504000 Next change: 3 Next Kp: 0.235678 Next Ki: 0.000104 Next Kd: 2.730000
+Current change: 3 Current Kp: 0.235678 Current Ki: 0.000104 Current Kd: 2.730000 Current error:   238.830 Best error: 238.830000 Next change: 4 Next Kp: 0.235678 Next Ki: 0.000104 Next Kd: 2.924860
+Current change: 4 Current Kp: 0.235678 Current Ki: 0.000104 Current Kd: 2.924860 Current error:   256.220 Best error: 238.830000 Next change: 5 Next Kp: 0.235678 Next Ki: 0.000104 Next Kd: 2.535140
+Current change: 5 Current Kp: 0.235678 Current Ki: 0.000104 Current Kd: 2.535140 Current error:   323.443 Best error: 238.830000 Next change: 0 Next Kp: 0.253143 Next Ki: 0.000104 Next Kd: 2.730000
+Current change: 0 Current Kp: 0.253143 Current Ki: 0.000104 Current Kd: 2.730000 Current error:  1380.610 Best error: 238.830000 Next change: 1 Next Kp: 0.218212 Next Ki: 0.000104 Next Kd: 2.730000
+Current change: 1 Current Kp: 0.218212 Current Ki: 0.000104 Current Kd: 2.730000 Current error:   336.034 Best error: 238.830000 Next change: 2 Next Kp: 0.235678 Next Ki: 0.000111 Next Kd: 2.730000
+Current change: 2 Current Kp: 0.235678 Current Ki: 0.000111 Current Kd: 2.730000 Current error:   248.467 Best error: 238.830000 Next change: 3 Next Kp: 0.235678 Next Ki: 0.000096 Next Kd: 2.730000
+Current change: 3 Current Kp: 0.235678 Current Ki: 0.000096 Current Kd: 2.730000 Current error:   240.329 Best error: 238.830000 Next change: 4 Next Kp: 0.235678 Next Ki: 0.000104 Next Kd: 2.905380
+Current change: 4 Current Kp: 0.235678 Current Ki: 0.000104 Current Kd: 2.905380 Current error:   257.675 Best error: 238.830000 Next change: 5 Next Kp: 0.235678 Next Ki: 0.000104 Next Kd: 2.554620
+Current change: 5 Current Kp: 0.235678 Current Ki: 0.000104 Current Kd: 2.554620 Current error:   351.012 Best error: 238.830000 Next change: 0 Next Kp: 0.251396 Next Ki: 0.000104 Next Kd: 2.730000
+Current change: 0 Current Kp: 0.251396 Current Ki: 0.000104 Current Kd: 2.730000 Current error:   335.588 Best error: 238.830000 Next change: 1 Next Kp: 0.219959 Next Ki: 0.000104 Next Kd: 2.730000
+Current change: 1 Current Kp: 0.219959 Current Ki: 0.000104 Current Kd: 2.730000 Current error:   344.951 Best error: 238.830000 Next change: 2 Next Kp: 0.235678 Next Ki: 0.000110 Next Kd: 2.730000
+Current change: 2 Current Kp: 0.235678 Current Ki: 0.000110 Current Kd: 2.730000 Current error:   470.976 Best error: 238.830000 Next change: 3 Next Kp: 0.235678 Next Ki: 0.000097 Next Kd: 2.730000
+Current change: 3 Current Kp: 0.235678 Current Ki: 0.000097 Current Kd: 2.730000 Current error:   277.018 Best error: 238.830000 Next change: 4 Next Kp: 0.235678 Next Ki: 0.000104 Next Kd: 2.887840
+Current change: 4 Current Kp: 0.235678 Current Ki: 0.000104 Current Kd: 2.887840 Current error:   248.468 Best error: 238.830000 Next change: 5 Next Kp: 0.235678 Next Ki: 0.000104 Next Kd: 2.572160
+Current change: 5 Current Kp: 0.235678 Current Ki: 0.000104 Current Kd: 2.572160 Current error:   371.574 Best error: 238.830000 Next change: 0 Next Kp: 0.249825 Next Ki: 0.000104 Next Kd: 2.730000
+Current change: 0 Current Kp: 0.249825 Current Ki: 0.000104 Current Kd: 2.730000 Current error:   333.975 Best error: 238.830000 Next change: 1 Next Kp: 0.221531 Next Ki: 0.000104 Next Kd: 2.730000
+Current change: 1 Current Kp: 0.221531 Current Ki: 0.000104 Current Kd: 2.730000 Current error:   368.330 Best error: 238.830000 Next change: 2 Next Kp: 0.235678 Next Ki: 0.000109 Next Kd: 2.730000
+Current change: 2 Current Kp: 0.235678 Current Ki: 0.000109 Current Kd: 2.730000 Current error:   265.825 Best error: 238.830000 Next change: 3 Next Kp: 0.235678 Next Ki: 0.000098 Next Kd: 2.730000
+Current change: 3 Current Kp: 0.235678 Current Ki: 0.000098 Current Kd: 2.730000 Current error:   254.431 Best error: 238.830000 Next change: 4 Next Kp: 0.235678 Next Ki: 0.000104 Next Kd: 2.872050
+Current change: 4 Current Kp: 0.235678 Current Ki: 0.000104 Current Kd: 2.872050 Current error:   393.930 Best error: 238.830000 Next change: 5 Next Kp: 0.235678 Next Ki: 0.000104 Next Kd: 2.587950
+Current change: 5 Current Kp: 0.235678 Current Ki: 0.000104 Current Kd: 2.587950 Current error:   282.995 Best error: 238.830000 Next change: 0 Next Kp: 0.248410 Next Ki: 0.000104 Next Kd: 2.730000
+Current change: 0 Current Kp: 0.248410 Current Ki: 0.000104 Current Kd: 2.730000 Current error:   332.991 Best error: 238.830000 Next change: 1 Next Kp: 0.222945 Next Ki: 0.000104 Next Kd: 2.730000
+Current change: 1 Current Kp: 0.222945 Current Ki: 0.000104 Current Kd: 2.730000 Current error:   329.923 Best error: 238.830000 Next change: 2 Next Kp: 0.235678 Next Ki: 0.000109 Next Kd: 2.730000
+Current change: 2 Current Kp: 0.235678 Current Ki: 0.000109 Current Kd: 2.730000 Current error:   339.263 Best error: 238.830000 Next change: 3 Next Kp: 0.235678 Next Ki: 0.000098 Next Kd: 2.730000
+Current change: 3 Current Kp: 0.235678 Current Ki: 0.000098 Current Kd: 2.730000 Current error:   251.548 Best error: 238.830000 Next change: 4 Next Kp: 0.235678 Next Ki: 0.000104 Next Kd: 2.857850
+Current change: 4 Current Kp: 0.235678 Current Ki: 0.000104 Current Kd: 2.857850 Current error:   258.474 Best error: 238.830000 Next change: 5 Next Kp: 0.235678 Next Ki: 0.000104 Next Kd: 2.602150
+Current change: 5 Current Kp: 0.235678 Current Ki: 0.000104 Current Kd: 2.602150 Current error:   248.337 Best error: 238.830000 Next change: 0 Next Kp: 0.247137 Next Ki: 0.000104 Next Kd: 2.730000
+Current change: 0 Current Kp: 0.247137 Current Ki: 0.000104 Current Kd: 2.730000 Current error:   237.664 Best error: 237.664000 Next change: 2 Next Kp: 0.247137 Next Ki: 0.000108 Next Kd: 2.730000
+Current change: 2 Current Kp: 0.247137 Current Ki: 0.000108 Current Kd: 2.730000 Current error:   540.843 Best error: 237.664000 Next change: 3 Next Kp: 0.247137 Next Ki: 0.000099 Next Kd: 2.730000
+Current change: 3 Current Kp: 0.247137 Current Ki: 0.000099 Current Kd: 2.730000 Current error:   348.200 Best error: 237.664000 Next change: 4 Next Kp: 0.247137 Next Ki: 0.000104 Next Kd: 2.845060
+Current change: 4 Current Kp: 0.247137 Current Ki: 0.000104 Current Kd: 2.845060 Current error:   271.860 Best error: 237.664000 Next change: 5 Next Kp: 0.247137 Next Ki: 0.000104 Next Kd: 2.614940
+Current change: 5 Current Kp: 0.247137 Current Ki: 0.000104 Current Kd: 2.614940 Current error:   264.601 Best error: 237.664000 Next change: 0 Next Kp: 0.259742 Next Ki: 0.000104 Next Kd: 2.730000
+Current change: 0 Current Kp: 0.259742 Current Ki: 0.000104 Current Kd: 2.730000 Current error:   214.911 Best error: 214.911000 Next change: 2 Next Kp: 0.259742 Next Ki: 0.000108 Next Kd: 2.730000
+Current change: 2 Current Kp: 0.259742 Current Ki: 0.000108 Current Kd: 2.730000 Current error:   259.811 Best error: 214.911000 Next change: 3 Next Kp: 0.259742 Next Ki: 0.000099 Next Kd: 2.730000
+Current change: 3 Current Kp: 0.259742 Current Ki: 0.000099 Current Kd: 2.730000 Current error:   326.024 Best error: 214.911000 Next change: 4 Next Kp: 0.259742 Next Ki: 0.000104 Next Kd: 2.833560
+Current change: 4 Current Kp: 0.259742 Current Ki: 0.000104 Current Kd: 2.833560 Current error:   326.538 Best error: 214.911000 Next change: 5 Next Kp: 0.259742 Next Ki: 0.000104 Next Kd: 2.626440
+Current change: 5 Current Kp: 0.259742 Current Ki: 0.000104 Current Kd: 2.626440 Current error:   467.431 Best error: 214.911000 Next change: 0 Next Kp: 0.273607 Next Ki: 0.000104 Next Kd: 2.730000
+Current change: 0 Current Kp: 0.273607 Current Ki: 0.000104 Current Kd: 2.730000 Current error:   251.693 Best error: 214.911000 Next change: 1 Next Kp: 0.245876 Next Ki: 0.000104 Next Kd: 2.730000
+Current change: 1 Current Kp: 0.245876 Current Ki: 0.000104 Current Kd: 2.730000 Current error:   263.893 Best error: 214.911000 Next change: 2 Next Kp: 0.259742 Next Ki: 0.000107 Next Kd: 2.730000
+Current change: 2 Current Kp: 0.259742 Current Ki: 0.000107 Current Kd: 2.730000 Current error:   448.497 Best error: 214.911000 Next change: 3 Next Kp: 0.259742 Next Ki: 0.000100 Next Kd: 2.730000
+Current change: 3 Current Kp: 0.259742 Current Ki: 0.000100 Current Kd: 2.730000 Current error:   234.383 Best error: 214.911000 Next change: 4 Next Kp: 0.259742 Next Ki: 0.000104 Next Kd: 2.823200
+Current change: 4 Current Kp: 0.259742 Current Ki: 0.000104 Current Kd: 2.823200 Current error:   273.311 Best error: 214.911000 Next change: 5 Next Kp: 0.259742 Next Ki: 0.000104 Next Kd: 2.636800
+Current change: 5 Current Kp: 0.259742 Current Ki: 0.000104 Current Kd: 2.636800 Current error:   458.652 Best error: 214.911000 Next change: 0 Next Kp: 0.272220 Next Ki: 0.000104 Next Kd: 2.730000
+Current change: 0 Current Kp: 0.272220 Current Ki: 0.000104 Current Kd: 2.730000 Current error:   250.279 Best error: 214.911000 Next change: 1 Next Kp: 0.247263 Next Ki: 0.000104 Next Kd: 2.730000
+Current change: 1 Current Kp: 0.247263 Current Ki: 0.000104 Current Kd: 2.730000 Current error:   670.927 Best error: 214.911000 Next change: 2 Next Kp: 0.259742 Next Ki: 0.000107 Next Kd: 2.730000
+Current change: 2 Current Kp: 0.259742 Current Ki: 0.000107 Current Kd: 2.730000 Current error:   224.333 Best error: 214.911000 Next change: 3 Next Kp: 0.259742 Next Ki: 0.000100 Next Kd: 2.730000
+Current change: 3 Current Kp: 0.259742 Current Ki: 0.000100 Current Kd: 2.730000 Current error:   397.589 Best error: 214.911000 Next change: 4 Next Kp: 0.259742 Next Ki: 0.000104 Next Kd: 2.813880
+Current change: 4 Current Kp: 0.259742 Current Ki: 0.000104 Current Kd: 2.813880 Current error:   334.954 Best error: 214.911000 Next change: 5 Next Kp: 0.259742 Next Ki: 0.000104 Next Kd: 2.646120
+Current change: 5 Current Kp: 0.259742 Current Ki: 0.000104 Current Kd: 2.646120 Current error:   206.139 Best error: 206.139000 Next change: 0 Next Kp: 0.270973 Next Ki: 0.000104 Next Kd: 2.646120
+Current change: 0 Current Kp: 0.270973 Current Ki: 0.000104 Current Kd: 2.646120 Current error:   230.494 Best error: 206.139000 Next change: 1 Next Kp: 0.248511 Next Ki: 0.000104 Next Kd: 2.646120
+Current change: 1 Current Kp: 0.248511 Current Ki: 0.000104 Current Kd: 2.646120 Current error:   256.767 Best error: 206.139000 Next change: 2 Next Kp: 0.259742 Next Ki: 0.000107 Next Kd: 2.646120
+Current change: 2 Current Kp: 0.259742 Current Ki: 0.000107 Current Kd: 2.646120 Current error:   320.315 Best error: 206.139000 Next change: 3 Next Kp: 0.259742 Next Ki: 0.000100 Next Kd: 2.646120
+Current change: 3 Current Kp: 0.259742 Current Ki: 0.000100 Current Kd: 2.646120 Current error:   498.391 Best error: 206.139000 Next change: 4 Next Kp: 0.259742 Next Ki: 0.000104 Next Kd: 2.738390
+Current change: 4 Current Kp: 0.259742 Current Ki: 0.000104 Current Kd: 2.738390 Current error:   227.241 Best error: 206.139000 Next change: 5 Next Kp: 0.259742 Next Ki: 0.000104 Next Kd: 2.553850
+Current change: 5 Current Kp: 0.259742 Current Ki: 0.000104 Current Kd: 2.553850 Current error:   237.555 Best error: 206.139000 Next change: 0 Next Kp: 0.269850 Next Ki: 0.000104 Next Kd: 2.646120
+Current change: 0 Current Kp: 0.269850 Current Ki: 0.000104 Current Kd: 2.646120 Current error:   492.138 Best error: 206.139000 Next change: 1 Next Kp: 0.249634 Next Ki: 0.000104 Next Kd: 2.646120
+Current change: 1 Current Kp: 0.249634 Current Ki: 0.000104 Current Kd: 2.646120 Current error:   245.758 Best error: 206.139000 Next change: 2 Next Kp: 0.259742 Next Ki: 0.000106 Next Kd: 2.646120
+Current change: 2 Current Kp: 0.259742 Current Ki: 0.000106 Current Kd: 2.646120 Current error:   274.178 Best error: 206.139000 Next change: 3 Next Kp: 0.259742 Next Ki: 0.000101 Next Kd: 2.646120
+Current change: 3 Current Kp: 0.259742 Current Ki: 0.000101 Current Kd: 2.646120 Current error:   352.695 Best error: 206.139000 Next change: 4 Next Kp: 0.259742 Next Ki: 0.000104 Next Kd: 2.729160
+Current change: 4 Current Kp: 0.259742 Current Ki: 0.000104 Current Kd: 2.729160 Current error:   271.952 Best error: 206.139000 Next change: 5 Next Kp: 0.259742 Next Ki: 0.000104 Next Kd: 2.563080
+Current change: 5 Current Kp: 0.259742 Current Ki: 0.000104 Current Kd: 2.563080 Current error:   220.953 Best error: 206.139000 Next change: 0 Next Kp: 0.268839 Next Ki: 0.000104 Next Kd: 2.646120
+Current change: 0 Current Kp: 0.268839 Current Ki: 0.000104 Current Kd: 2.646120 Current error:   508.985 Best error: 206.139000 Next change: 1 Next Kp: 0.250644 Next Ki: 0.000104 Next Kd: 2.646120
+Current change: 1 Current Kp: 0.250644 Current Ki: 0.000104 Current Kd: 2.646120 Current error:   231.985 Best error: 206.139000 Next change: 2 Next Kp: 0.259742 Next Ki: 0.000106 Next Kd: 2.646120
+Current change: 2 Current Kp: 0.259742 Current Ki: 0.000106 Current Kd: 2.646120 Current error:   262.412 Best error: 206.139000 Next change: 3 Next Kp: 0.259742 Next Ki: 0.000101 Next Kd: 2.646120
+Current change: 3 Current Kp: 0.259742 Current Ki: 0.000101 Current Kd: 2.646120 Current error:   284.827 Best error: 206.139000 Next change: 4 Next Kp: 0.259742 Next Ki: 0.000104 Next Kd: 2.720860
+Current change: 4 Current Kp: 0.259742 Current Ki: 0.000104 Current Kd: 2.720860 Current error:   318.402 Best error: 206.139000 Next change: 5 Next Kp: 0.259742 Next Ki: 0.000104 Next Kd: 2.571380
+Current change: 5 Current Kp: 0.259742 Current Ki: 0.000104 Current Kd: 2.571380 Current error:   216.804 Best error: 206.139000 Next change: 0 Next Kp: 0.267929 Next Ki: 0.000104 Next Kd: 2.646120
+Current change: 0 Current Kp: 0.267929 Current Ki: 0.000104 Current Kd: 2.646120 Current error:   332.618 Best error: 206.139000 Next change: 1 Next Kp: 0.251554 Next Ki: 0.000104 Next Kd: 2.646120
+Current change: 1 Current Kp: 0.251554 Current Ki: 0.000104 Current Kd: 2.646120 Current error:   221.049 Best error: 206.139000 Next change: 2 Next Kp: 0.259742 Next Ki: 0.000106 Next Kd: 2.646120
+Current change: 2 Current Kp: 0.259742 Current Ki: 0.000106 Current Kd: 2.646120 Current error:  1865.850 Best error: 206.139000 Next change: 3 Next Kp: 0.259742 Next Ki: 0.000101 Next Kd: 2.646120
+Current change: 3 Current Kp: 0.259742 Current Ki: 0.000101 Current Kd: 2.646120 Current error: 18945.000 Best error: 206.139000 Next change: 4 Next Kp: 0.259742 Next Ki: 0.000104 Next Kd: 2.713380
+Current change: 4 Current Kp: 0.259742 Current Ki: 0.000104 Current Kd: 2.713380 Current error: 20472.100 Best error: 206.139000 Next change: 5 Next Kp: 0.259742 Next Ki: 0.000104 Next Kd: 2.578850
 ```
 
-As the starting conditions for each full loop are not absolutely the same, the accumulated full loop cross track error `error` is noisy. Therefore, the Twiddle algorithm cannot really converge. For example if a lucky loop didn't have a large deviation, it might be forever considered to have the best error although other parameter settings would actually be better.
+As the starting conditions for each full loop are not absolutely the same and the number of full loop steps `NUM_LOOP_STEPS` doesn't guarantee an exact start and end position of one single loop, the accumulated full loop cross track error `error` is noisy. Therefore, the Twiddle algorithm cannot really converge. For example if a lucky loop didn't have a large deviation, it might be forever considered to have the best error although other parameter settings would actually be better.
 
-Also, some parameter settings lead to the vehicle leaving the track or getting stuck. When this occured, I restartet the simulation and the Twiddle algorithm continued. As leaving the track or getting stuck leads to a large cross track error `cte` and hence large full loop error `error`, these parameter settings are automatically excluded from being considered as best solution.
+Also, some parameter settings lead to the vehicle leaving the track or getting stuck. When this occured, I restartet the simulator and the Twiddle algorithm continued. As leaving the track or getting stuck leads to a large cross track error `cte` and hence large full loop error `error`, these parameter settings are automatically excluded from being considered as best solution.
 
-The following animation shows a short section of the track with the optimal controller parameters `KP = 0.2`, `KI = 0.0001` and `KD = 3.0`.
+The following animations shows a short section of the track with the starting controller parameters `DEFAULT_KP = 0.2`, `DEFAULT_KI = 0.0001` and `DEFAULT_KD = 3.0` on the left and the optimal controller parameters `KP = 0.259742`, `KI = 0.000104` and `KD = 2.646120` on the right.
 
-<img src="docu_images/190119_StAn_Udacity_SDC_PP_start_small.gif" width="48%"> <img src="docu_images/190119_StAn_Udacity_SDC_PP_straight_01_small.gif" width="48%">
+<img src="docu_images/190126a_StAn_Udacity_SDC_PID_start_small.gif" width="48%"> <img src="docu_images/190126b_StAn_Udacity_SDC_PID_optimal_small.gif" width="48%">
+
+It is important to mention that the stability of the PID controller and the controller parameters are also highly dependend on the dead time of the computer system from sending a new steering angle to the vehicle to receiving a new cross track error from the simulator. The faster the computer system the more exchanges happen and the more stable the control.
 
 ## 5. Discussion
 
@@ -366,4 +469,4 @@ Finally, the PID steering controller can further be improved by using the output
 steer_value = steering_angle - ((Kp * p_error) + (Kd * d_error) + (Ki * i_error));
 ```
 
-In this case the steering angle `steering_angle` is estimated based on the trained behavior. The PID steering controller only needs to compensate for the errors in this estimation and not take care of the complete steering angle signal `steer_value`. Therefore, the Twiddle tuning will result in different PID control parameters which are typically much smaller than without the feedforward control. As a result the control behavior will be much smoother.
+In this case the steering angle `steering_angle` is estimated based on the trained behavior. The PID steering controller only needs to compensate for the errors in this estimation and not take care of the complete steering angle signal `steer_value`. Therefore, the Twiddle tuning will result in different PID control parameters which are typically much smaller than without the feedforward control. As a result the control behavior can be much smoother.
