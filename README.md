@@ -343,6 +343,8 @@ Current change: 5 Current Kp: 0.22 Current Ki: 0.00011 Current Kd: 3.3 Best erro
 Current change: 0 Current Kp: 0.22 Current Ki: 0.00011 Current Kd: 3 Best error: 298.918 Next change: 1 Next Kp: 0.242 Next Ki: 0.00011 Next Kd: 3
 ```
 
+As the starting conditions for each full loop are not absolutely the same, the accumulated full loop cross track error `error` is noisy. Therefore, the Twiddle algorithm cannot really converge. For example if a lucky loop didn't have a large deviation, it might be forever considered to have the best error although other parameter settings would actually be better.
+
 <img src="docu_images/190119_StAn_Udacity_SDC_PP_start_small.gif" width="48%"> <img src="docu_images/190119_StAn_Udacity_SDC_PP_straight_01_small.gif" width="48%">
 
 ## 5. Discussion
