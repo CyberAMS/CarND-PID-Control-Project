@@ -332,7 +332,9 @@ The program is compiled using the `.\build.sh` command. After this it can be sta
 
 ### 2. Simulation results
 
-XXX
+First I needed to manually tune the controller parameters to have the car successfully navigate the track without leaving it or getting stuck. I settled on the above mentioned default parameters `DEFAULT_KP = 0.2`, `DEFAULT_KI = 0.0001` and `DEFAULT_KD = 3.0`.
+
+Then I used the Twiddle algorithm to further optimize the controller parameters. These are the steps the Twiddle algorithm took:
 
 ```
 Current change: X Current Kp: X Current Ki: X Current Kd: X Best error: 1.79769e+308 Next change: 0 Next Kp: 0.2 Next Ki: 0.0001 Next Kd: 3
@@ -346,6 +348,8 @@ Current change: 0 Current Kp: 0.22 Current Ki: 0.00011 Current Kd: 3 Best error:
 As the starting conditions for each full loop are not absolutely the same, the accumulated full loop cross track error `error` is noisy. Therefore, the Twiddle algorithm cannot really converge. For example if a lucky loop didn't have a large deviation, it might be forever considered to have the best error although other parameter settings would actually be better.
 
 Also, some parameter settings lead to the vehicle leaving the track or getting stuck. When this occured, I restartet the simulation and the Twiddle algorithm continued. As leaving the track or getting stuck leads to a large cross track error `cte` and hence large full loop error `error`, these parameter settings are automatically excluded from being considered as best solution.
+
+The following animation shows a short section of the track with the optimal controller parameters `KP = 0.2`, `KI = 0.0001` and `KD = 3.0`.
 
 <img src="docu_images/190119_StAn_Udacity_SDC_PP_start_small.gif" width="48%"> <img src="docu_images/190119_StAn_Udacity_SDC_PP_straight_01_small.gif" width="48%">
 
