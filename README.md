@@ -345,6 +345,8 @@ Current change: 0 Current Kp: 0.22 Current Ki: 0.00011 Current Kd: 3 Best error:
 
 As the starting conditions for each full loop are not absolutely the same, the accumulated full loop cross track error `error` is noisy. Therefore, the Twiddle algorithm cannot really converge. For example if a lucky loop didn't have a large deviation, it might be forever considered to have the best error although other parameter settings would actually be better.
 
+Also, some parameter settings lead to the vehicle leaving the track or getting stuck. When this occured, I restartet the simulation and the Twiddle algorithm continued. As leaving the track or getting stuck leads to a large cross track error `cte` and hence large full loop error `error`, these parameter settings are automatically excluded from being considered as best solution.
+
 <img src="docu_images/190119_StAn_Udacity_SDC_PP_start_small.gif" width="48%"> <img src="docu_images/190119_StAn_Udacity_SDC_PP_straight_01_small.gif" width="48%">
 
 ## 5. Discussion
