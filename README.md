@@ -454,6 +454,8 @@ The following animations shows a short section of the track with the starting co
 
 <img src="docu_images/190126a_StAn_Udacity_SDC_PID_start_small_condensed2.gif" width="48%"> <img src="docu_images/190126b_StAn_Udacity_SDC_PID_optimal_small_condensed2.gif" width="48%">
 
+The optimal parameters on average allow faster speeds with constant throttle which is also an indication of less aggressive steering behavior.
+
 It is important to mention that the stability of the PID controller and the controller parameters are also highly dependend on the dead time of the computer system from sending a new steering angle to the vehicle to receiving a new cross track error from the simulator. The faster the computer system the more exchanges happen and the more stable the control.
 
 ## 5. Discussion
