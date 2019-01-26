@@ -83,13 +83,13 @@ The `PID` class contains all the functions to implement a PID controller and the
 | `UpdateError()` | Update the proportional, integral and differential error values as well as twiddle the controller gains. |
 | `TotalError()` | Calculate the next steering angle based on the proportional, integral and differential gains and errors. |
 
-The behavior of this class is controlled with the below mostly self explaining constants. The parameter `TWIDDLE_FACTOR` defines how small the initial controller gain changes in the Twiddle algorithm are in relation to their default values. The parameter `NUM_CHANGE_STATES` defines the number of different changes that are possible during the Twiddle algorithm (increase Kp, decrease Kp, increase Ki, decrease Ki, increase Kd, decrease Kd).
+The behavior of this class is controlled with the below mostly self explaining constants. The number of steps per full loop `NUM_LOOP_STEPS` must be adjusted to the performance of the computer system. The faster the computer system the more steps are used for each loop, because information is exchanged more often between the simulator and the controller. The parameter `TWIDDLE_FACTOR` defines how small the initial controller gain changes in the Twiddle algorithm are in relation to their default values. The parameter `NUM_CHANGE_STATES` defines the number of different changes that are possible during the Twiddle algorithm (increase Kp, decrease Kp, increase Ki, decrease Ki, increase Kd, decrease Kd).
 
 ```C
 // define constants
 const bool TWIDDLE = true;
 const unsigned int NUM_CONVERGED_STEPS = 100;
-const unsigned int NUM_LOOP_STEPS = 2000;
+const unsigned int NUM_LOOP_STEPS = 1000;
 const double DEFAULT_KP = 0.2;
 const double DEFAULT_KI = 0.0001;
 const double DEFAULT_KD = 3.0;
@@ -120,7 +120,7 @@ steer_value = max(min(steer_value, 1.0), -1.0);
 
 ### 2. Twiddle algorithm
 
-Before we record the cross track error `cte` over a full loop of the track as `error`, we need to set the new control gains and then wait a few steps until the control behavior settles on these parameters.
+Before we record the cross track error `cte` over a full loop of the track as `error`, we need to set the new control gains and then wait a few steps until the control behavior settles on these parameters. The full loop error `error` is calculated as sum of all squared cross track errors `cte` over roughly one loop of the track. 
 
 After each full loop the Twiddle algorithm varies one of the three PID controller parameters at a time. And for each gain it first tries to increase the value. If this leads to an improvement, the algorithm remembers that larger gain changes might make sense and then jumps to the next control parameter. If it doesn't lead to an improvement, it tries the decrease the gain. If this leads to an improvement, the algorithm remembers that larger gain changes might make sense and then jumps to the next control parameter. If not, the algorithm reverts to the original gain value and remembers that smaller gain changes might make sense and then jumps to the next control parameter.
 
@@ -147,7 +147,7 @@ if (!is_converged) {
 } else {
 	
 	// increase error
-	error += fabs(cte);
+	error += pow(cte, 2);
 	
 	// check whether we restart a cycle/loop and need to twiddle
 	if (full_loop_steps == 0) {
@@ -323,27 +323,12 @@ The program is compiled using the `.\build.sh` command. After this it can be sta
 XXX
 
 ```
-Current change: X Kp: 0.20000 Ki: 0.00010   Kd: 3.000 Best error: 1.79769e+308 Next change: 0
-Current change: 0 Kp: 0.22000 Ki: 0.00010   Kd: 3.000 Best error: 551.337      Next change: 2
-Current change: 2 Kp: 0.22000 Ki: 0.00011   Kd: 3.000 Best error: 551.337      Next change: 3
-Current change: 3 Kp: 0.22000 Ki: 9e-05     Kd: 3.000 Best error: 504.215      Next change: 4
-Current change: 4 Kp: 0.22000 Ki: 9e-05     Kd: 3.300 Best error: 504.215      Next change: 5
-Current change: 5 Kp: 0.22000 Ki: 9e-05     Kd: 3.000 Best error: 504.215      Next change: 0
-Current change: 0 Kp: 0.24200 Ki: 9e-05     Kd: 3.000 Best error: 504.215      Next change: 1
-Current change: 1 Kp: 0.19800 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 2
-Current change: 2 Kp: 0.19800 Ki: 0.000101  Kd: 3.000 Best error: 475.731      Next change: 3
-Current change: 3 Kp: 0.19800 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 4
-Current change: 4 Kp: 0.19800 Ki: 9e-05     Kd: 3.270 Best error: 475.731      Next change: 5
-Current change: 5 Kp: 0.19800 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 0
-Current change: 0 Kp: 0.22220 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 1
-Current change: 1 Kp: 0.19800 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 2
-Current change: 2 Kp: 0.19800 Ki: 9.99e-05  Kd: 3.000 Best error: 475.731      Next change: 3
-Current change: 3 Kp: 0.19800 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 4
-Current change: 4 Kp: 0.19800 Ki: 9e-05     Kd: 3.243 Best error: 475.731      Next change: 5
-Current change: 5 Kp: 0.19800 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 0
-Current change: 0 Kp: 0.21978 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 1
-Current change: 1 Kp: 0.19800 Ki: 9e-05     Kd: 3.000 Best error: 475.731      Next change: 2
-Current change: 2 Kp: 0.19800 Ki: 9.891e-05 Kd: 3.000 Best error: 475.731      Next change: 3
+Current change: X Current Kp: X Current Ki: X Current Kd: X Best error: 1.79769e+308 Next change: 0 Next Kp: 0.2 Next Ki: 0.0001 Next Kd: 3
+Current change: 0 Current Kp: 0.2 Current Ki: 0.0001 Current Kd: 3 Best error: 382.24 Next change: 2 Next Kp: 0.22 Next Ki: 0.0001 Next Kd: 3
+Current change: 2 Current Kp: 0.22 Current Ki: 0.0001 Current Kd: 3 Best error: 298.918 Next change: 4 Next Kp: 0.22 Next Ki: 0.00011 Next Kd: 3
+Current change: 4 Current Kp: 0.22 Current Ki: 0.00011 Current Kd: 3 Best error: 298.918 Next change: 5 Next Kp: 0.22 Next Ki: 0.00011 Next Kd: 3.3
+Current change: 5 Current Kp: 0.22 Current Ki: 0.00011 Current Kd: 3.3 Best error: 298.918 Next change: 0 Next Kp: 0.22 Next Ki: 0.00011 Next Kd: 3
+Current change: 0 Current Kp: 0.22 Current Ki: 0.00011 Current Kd: 3 Best error: 298.918 Next change: 1 Next Kp: 0.242 Next Ki: 0.00011 Next Kd: 3
 ```
 
 <img src="docu_images/190119_StAn_Udacity_SDC_PP_start_small.gif" width="48%"> <img src="docu_images/190119_StAn_Udacity_SDC_PP_straight_01_small.gif" width="48%">

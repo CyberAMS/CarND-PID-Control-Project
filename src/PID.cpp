@@ -107,10 +107,7 @@ void PID::UpdateError(double cte) {
 				
 				switch (change) {
 					
-					case 0:
-						
-						// adjust controller parameter
-						Kp += dKp;
+					case 0: // increase Kp
 						
 						// check whether last error is an improvement
 						if (error < best_error) {
@@ -120,19 +117,22 @@ void PID::UpdateError(double cte) {
 							dKp *= 1.1;
 							change = fmod((change + 2), NUM_CHANGE_STATES);
 							
-						} else {
+							// adjust controller parameter for change == 2
+							Ki += dKi;
+							
+							} else {
 							
 							// move to next change
 							change = fmod((change + 1), NUM_CHANGE_STATES);
+							
+							// adjust controller parameter for change == 1
+							Kp -= 2 * dKp;
 							
 						}
 						
 						break; // switch
 						
-					case 1:
-						
-						// adjust controller parameter
-						Kp -= 2 * dKp;
+					case 1: // decrease Kp
 						
 						// check whether last error is an improvement
 						if (error < best_error) {
@@ -152,12 +152,12 @@ void PID::UpdateError(double cte) {
 						// move to next change
 						change = fmod((change + 1), NUM_CHANGE_STATES);
 						
+						// adjust controller parameter for change == 2
+						Ki += dKi;
+						
 						break; // switch
 						
-					case 2:
-						
-						// adjust controller parameter
-						Ki += dKi;
+					case 2: // increase Ki
 						
 						// check whether last error is an improvement
 						if (error < best_error) {
@@ -167,19 +167,22 @@ void PID::UpdateError(double cte) {
 							dKi *= 1.1;
 							change = fmod((change + 2), NUM_CHANGE_STATES);
 							
+							// adjust controller parameter for change == 4
+							Kd += dKd;
+							
 						} else {
 							
 							// move to next change
 							change = fmod((change + 1), NUM_CHANGE_STATES);
 							
+							// adjust controller parameter for change == 3
+							Ki -= 2 * dKi;
+							
 						}
 						
 						break; // switch
 						
-					case 3:
-						
-						// adjust controller parameter
-						Ki -= 2 * dKi;
+					case 3: // decrease Ki
 						
 						// check whether last error is an improvement
 						if (error < best_error) {
@@ -199,12 +202,12 @@ void PID::UpdateError(double cte) {
 						// move to next change
 						change = fmod((change + 1), NUM_CHANGE_STATES);
 						
+						// adjust controller parameter for change == 4
+						Kd += dKd;
+						
 						break; // switch
 						
-					case 4:
-						
-						// adjust controller parameter
-						Kd += dKd;
+					case 4: // increase Kd
 						
 						// check whether last error is an improvement
 						if (error < best_error) {
@@ -214,19 +217,22 @@ void PID::UpdateError(double cte) {
 							dKd *= 1.1;
 							change = fmod((change + 2), NUM_CHANGE_STATES);
 							
+							// adjust controller parameter for change == 0
+							Kp += dKp;
+							
 						} else {
 							
 							// move to next change
 							change = fmod((change + 1), NUM_CHANGE_STATES);
 							
+							// adjust controller parameter for change == 5
+							Kd -= 2 * dKd;
+							
 						}
 						
 						break; // switch
 						
-					case 5:
-						
-						// adjust controller parameter
-						Kd -= 2 * dKd;
+					case 5: // decrease Kd
 						
 						// check whether last error is an improvement
 						if (error < best_error) {
@@ -245,6 +251,9 @@ void PID::UpdateError(double cte) {
 						
 						// move to next change
 						change = fmod((change + 1), NUM_CHANGE_STATES);
+						
+						// adjust controller parameter for change == 0
+						Kp += dKp;
 						
 						break; // switch
 						
