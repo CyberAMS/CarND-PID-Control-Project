@@ -333,7 +333,13 @@ The program is compiled using the `.\build.sh` command. After this it can be sta
 
 First I needed to manually tune the controller parameters to have the car successfully navigate the track without leaving it or getting stuck. I settled on the above mentioned default parameters `DEFAULT_KP = 0.2`, `DEFAULT_KI = 0.0001` and `DEFAULT_KD = 3.0`.
 
-Then I used the Twiddle algorithm to further optimize the controller parameters. These are the steps the Twiddle algorithm took:
+The proportional gain `Kp` is important to drive larger steering angles for larger deviations, but it leads to constant oscillations. If the gain is selected too high, the oscillations become instable. If the gain is selected too low, the steering output doesn't keep the vehicle in the lane.
+
+The differential gain `Kd` is important, because it reacts to changes in the cross track error `cte` and if tuned correctly can reduces the magnitude of the osciallations. If the gain is selected too large, the control becomes instable very quickly and the magnitude of the oscillations increases.
+
+The integral gain `Ki` is important to offset any bias in the control system. If the gain is selected too large, the integral term grows too quickly and significantly slows down the reaction time of the controller.
+
+After manual tuning I used the Twiddle algorithm to further optimize the controller parameters. These are the steps the Twiddle algorithm took:
 
 ```
 Current change: X Current Kp: X        Current Ki: X        Current Kd: X        Current error: X         Best error: 1.798e+308 Next change: 0 Next Kp: 0.200000 Next Ki: 0.000100 Next Kd: 3.000000
